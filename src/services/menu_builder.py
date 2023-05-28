@@ -33,10 +33,16 @@ class MenuBuilder:
         }
 
         for dish in self.menu_data.dishes:
-            if restriction not in dish.get_restrictions():
+            if (
+                restriction is None
+                or restriction not in dish.get_restrictions()
+            ):
                 menu["dish_name"].append(dish.name)
                 menu["ingredients"].append(dish.get_ingredients())
                 menu["price"].append(dish.price)
                 menu["restrictions"].append(dish.get_restrictions())
 
-        return pd.DataFrame.from_dict(menu)
+        if not menu:
+            return pd.DataFrame()
+        else:
+            return pd.DataFrame.from_dict(menu)
